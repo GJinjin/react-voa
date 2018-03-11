@@ -1,22 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Row, Col, Menu, Icon } from 'antd'
-import store from '../../store/'
-import './style.css'
+import { connect } from 'react-redux'
 import { getChangeListAction } from './actionCreator'
+import { Row, Col, Menu, Icon } from 'antd'
+import './style.css'
 
 
-export default class View extends Component {
-
-	constructor (props) {
-		super(props)
-		this.state = store.getState()
-		store.subscribe(this.storeChangeHandler.bind(this))
-	}
-
-	storeChangeHandler () {
-		this.setState(store.getState())
-	}
+class View extends Component {
 
 	render () {
 		return (
@@ -28,7 +18,7 @@ export default class View extends Component {
 			      <Col span={16}>
 			      	<Menu mode="horizontal">
 				        {
-				        	this.state.common.list.map((value) => {
+				        	this.props.list.map((value) => {
 				        		return (
 				        			<Menu.Item key={value.id}>
 								        <Link to={value.link}>
@@ -54,14 +44,26 @@ export default class View extends Component {
 	getCommonInfo () {
 		fetch('/api/header.json')
 			.then((res) => res.json())
-			.then(this.getSuccInfoHandler.bind(this))
+			.then(this.props.changeList)
 			.catch(this.getErrInfoHandler.bind(this))
-	}
-
-	getSuccInfoHandler (res) {
-		var action = getChangeListAction(res.data.list)
-		store.dispatch(action)
 	}
 
 	getErrInfoHandler () {}
 }
+
+const mapStateToProps = (state) => {
+	return {
+		list: state.common.list
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		changeList: (res) => {
+			var action = getChangeListAction(res.data.list)
+			dispatch(action)
+		}
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(View)
