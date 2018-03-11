@@ -1,1 +1,1 @@
-export const CHANGE_LIST = 'change_list'
+export const CHANGE_LIST = 'COMMON/CHANGE_LIST'
