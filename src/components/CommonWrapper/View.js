@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { getChangeListAction } from './actionCreator'
-import { Row, Col, Menu, Icon } from 'antd'
+import { Row, Col, Menu, Icon, Card } from 'antd'
 import './style.css'
 
 
@@ -31,8 +31,8 @@ class View extends Component {
 				    </Menu>
 			      </Col>
 			    </Row>
-				<div>	
-				</div>
+				<div>{this.props.children}</div>
+				<Card title="Footer" style={{marginTop: '20px'}}></Card>
 			</div>
 		)
 	}
